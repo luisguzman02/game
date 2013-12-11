@@ -22,6 +22,11 @@ class Universe
   	  	self.universe[row][col] = set_cell(row, col)
   	  end
   	end
+    set_neighbours
+  end
+
+  def set_neighbours
+    self.universe.each{|r| r.each{|c| c.get_neighbours(self.universe) } }
   end
 
   def print_universe
@@ -49,9 +54,13 @@ class Cell
     self.neighbours = neighbours
   end
 
-  def get_neighbours
-    (self.row..self.row+1).times do
-    	
+  def get_neighbours(universe)
+    (self.row-1..self.row+1).each do |x|
+      (self.col-1..self.col+1).each do |y|
+        if (x != self.row || y != self.col) && (x >= 0 && y >= 0)
+          self.neighbours << universe[x][y] if universe[x][y].is_a? Cell
+        end
+      end
     end
   end
 end
